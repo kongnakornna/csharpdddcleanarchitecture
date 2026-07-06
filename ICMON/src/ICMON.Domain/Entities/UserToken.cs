@@ -3,15 +3,15 @@ namespace ICMON.Domain.Entities;
 public class UserToken : Entity<Guid>
 {
     public Guid UserId { get; private set; }
-    public string AccessToken { get; private set; }
-    public string RefreshToken { get; private set; }
+    public string AccessToken { get; private set; } = null!;
+    public string RefreshToken { get; private set; } = null!;
     public DateTime AccessTokenExpiresAt { get; private set; }
     public DateTime RefreshTokenExpiresAt { get; private set; }
     public bool IsRevoked { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public DateTime? RevokedAt { get; private set; }
 
-    public virtual User User { get; private set; }
+    public virtual User User { get; private set; } = null!;
 
     private UserToken() { }
 

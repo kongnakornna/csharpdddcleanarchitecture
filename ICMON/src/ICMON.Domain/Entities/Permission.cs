@@ -2,10 +2,10 @@ namespace ICMON.Domain.Entities;
 
 public class Permission : Entity<Guid>
 {
-    public string Code { get; private set; }
-    public string Name { get; private set; }
+    public string Code { get; private set; } = null!;
+    public string Name { get; private set; } = null!;
     public string? Description { get; private set; }
-    public string GroupName { get; private set; }
+    public string GroupName { get; private set; } = null!;
 
     private Permission() { }
 

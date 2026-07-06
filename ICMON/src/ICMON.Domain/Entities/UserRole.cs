@@ -6,8 +6,8 @@ public class UserRole : Entity<Guid>
     public Guid RoleId { get; private set; }
     public DateTime AssignedAt { get; private set; }
 
-    public virtual User User { get; private set; }
-    public virtual Role Role { get; private set; }
+    public virtual User User { get; private set; } = null!;
+    public virtual Role Role { get; private set; } = null!;
 
     private UserRole() { }
 

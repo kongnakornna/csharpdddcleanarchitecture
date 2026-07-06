@@ -5,11 +5,11 @@ namespace ICMON.Domain.Entities;
 
 public class User : AggregateRoot<Guid>
 {
-    public string Username { get; private set; }
-    public Email Email { get; private set; }
-    public string PasswordHash { get; private set; }
-    public string FirstName { get; private set; }
-    public string LastName { get; private set; }
+    public string Username { get; private set; } = null!;
+    public Email Email { get; private set; } = null!;
+    public string PasswordHash { get; private set; } = null!;
+    public string FirstName { get; private set; } = null!;
+    public string LastName { get; private set; } = null!;
     public UserStatus Status { get; private set; }
     public Guid WhitelabelId { get; private set; }
     public DateTime CreatedAt { get; private set; }

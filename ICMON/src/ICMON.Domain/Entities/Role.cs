@@ -2,7 +2,7 @@ namespace ICMON.Domain.Entities;
 
 public class Role : Entity<Guid>
 {
-    public string Name { get; private set; }
+    public string Name { get; private set; } = null!;
     public string? Description { get; private set; }
 
     private readonly List<RolePermission> _rolePermissions = new();

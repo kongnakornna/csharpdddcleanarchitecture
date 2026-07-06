@@ -1,2 +1,9 @@
 <Solution>
+  <Folder Name="/src/">
+    <Project Path="src/ICMON.Domain/ICMON.Domain.csproj" />
+    <Project Path="src/ICMON.Shared/ICMON.Shared.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/ICMON.ArchitectureTests/ICMON.ArchitectureTests.csproj" />
+  </Folder>
 </Solution>

@@ -990,5 +990,3 @@ public class QuotationPdfGenerator : IQuotationPdfGenerator
 8. โมดูลที่ 12: Multi-Language (i18n)
 9. โมดูลที่ 13: IoT & GPS Tracking
 10. โมดูลที่ 14: Web Order System (WOS)
-
-**กรุณาระบุหมายเลขโมดูล หรือพิมพ์ชื่อโมดูลที่ต้องการ** 👇

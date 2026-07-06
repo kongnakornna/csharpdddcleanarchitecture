@@ -1000,5 +1000,3 @@ public class PurchaseOrdersController : ControllerBase
 7. โมดูลที่ 12: Multi-Language (i18n)
 8. โมดูลที่ 13: IoT & GPS Tracking
 9. โมดูลที่ 14: Web Order System (WOS)
-
-**กรุณาระบุหมายเลขโมดูล หรือพิมพ์ชื่อโมดูลที่ต้องการ** 👇

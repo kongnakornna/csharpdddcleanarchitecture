@@ -1,4 +1,4 @@
-# 🚗 โมดูลที่ 1: Authentication & Permission
+# 🚗 โมดูลที่ 1: Authentication & Permission – สร้างเสร็จสมบูรณ์
 
 เราได้สร้างโค้ดครบทุก Layer สำหรับระบบ Authentication & Permission ตามสถาปัตยกรรม Clean Architecture + DDD + CQRS ในภาษา C# (.NET 8)
 
@@ -200,3 +200,7 @@ Authorization: Bearer <accessToken>
 - ✅ ใช้ Clean Architecture + DDD + CQRS
 
 ---
+
+## 📌 ขั้นตอนถัดไป
+
+พร้อมสร้าง **โมดูลที่ 2: Job Card Management** หรือโมดูลอื่นตามลำดับที่คุณต้องการ
