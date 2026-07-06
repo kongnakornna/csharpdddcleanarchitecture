@@ -6,7 +6,7 @@ services:
     env_file:
       - .env
     environment:
-      POSTGRES_DB: ${DB_NAME:-icmonapp}
+      POSTGRES_DB: ${DB_NAME:-icmonappcdd}
       POSTGRES_USER: ${DB_USER:-postgres}
       POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
     ports:
