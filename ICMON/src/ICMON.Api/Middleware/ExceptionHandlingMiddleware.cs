@@ -56,7 +56,7 @@ public class ExceptionHandlingMiddleware
                 break;
         }
 
-        _logger.LogError(exception, "Error: {Message}", exception.Message);
+        _logger.LogError(exception, "Error: {Message} {StackTrace}", exception.Message, exception.StackTrace);
 
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)statusCode;
@@ -64,6 +64,7 @@ public class ExceptionHandlingMiddleware
         var response = new
         {
             error = message,
+            detail = exception.ToString(),
             statusCode = (int)statusCode
         };
 
