@@ -9,7 +9,7 @@ public static class AppDbInitializer
 {
     public static async Task SeedAsync(AppDbContext context)
     {
-        await context.Database.MigrateAsync();
+        await context.Database.EnsureCreatedAsync();
 
         if (!await context.Roles.AnyAsync())
         {
