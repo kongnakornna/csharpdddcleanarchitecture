@@ -53,6 +53,13 @@ Stay updated and click Watch button, click ⭐ if you find it useful.
   - [8.1 Domain tests](#81-domain-tests)
   - [8.2 Application tests](#82-application-tests)
 - [9. Build with](#9-build-with)
+- [1. บทนำและภาพรวมระบบ](#1-บทนำและภาพรวมระบบ)
+  - [1.1 วัตถุประสงค์ (เหมือนเดิม)](#11-วัตถุประสงค์-เหมือนเดิม)
+  - [1.2 เทคโนโลยีหลัก (Tech Stack – .NET Edition)](#12-เทคโนโลยีหลัก-tech-stack--net-edition)
+- [2. สถาปัตยกรรมระบบ (Clean Architecture + DDD)](#2-สถาปัตยกรรมระบบ-clean-architecture--ddd)
+  - [2.1 แผนภาพสถาปัตยกรรม (ปรับเป็น .NET)](#21-แผนภาพสถาปัตยกรรม-ปรับเป็น-net)
+  - [2.2 หลักการออกแบบ (เหมือนเดิม)](#22-หลักการออกแบบ-เหมือนเดิม)
+- [3. ตัวอย่างโครงสร้างโปรเจกต์ (Solution Structure)](#3-ตัวอย่างโครงสร้างโปรเจกต์-solution-structure)
 
 
 ## 1. Installation
@@ -808,3 +815,211 @@ Testing the application layer essentially comes down to testing handlers. Below 
 * [MailHog](https://github.com/mailhog/MailHog)
 * [KeyCloak](https://github.com/keycloak/keycloak)
 
+
+## 1. บทนำและภาพรวมระบบ
+
+### 1.1 วัตถุประสงค์ (เหมือนเดิม)
+
+### 1.2 เทคโนโลยีหลัก (Tech Stack – .NET Edition)
+
+| หมวดหมู่ | เทคโนโลยี | เวอร์ชัน / ไลบรารี |
+|---------|-----------|-------------------|
+| **ภาษา** | C# | 12+ (.NET 8 / .NET 9) |
+| **Framework** | ASP.NET Core | 8.0+ |
+| **ORM** | Entity Framework Core | 8.0+ |
+| **ฐานข้อมูลหลัก** | PostgreSQL | 15+ (Npgsql) |
+| **Cache** | Redis | 7+ (StackExchange.Redis) |
+| **Message Queue** | Apache Kafka | 3.4+ (Confluent.Kafka) |
+| **Logging & Monitoring** | Serilog + Elasticsearch + Grafana | - |
+| **การจัดการเอกสาร** | QuestPDF / iTextSharp / PDFSharp | - |
+| **IoT** | MQTTnet (MQTT), InfluxDB.Client | - |
+| **Documentation** | Swashbuckle (Swagger) | - |
+| **Build Tool** | .NET CLI / MSBuild | - |
+| **Dependency Injection** | Built-in (Microsoft.Extensions.DependencyInjection) | - |
+| **Mapping** | AutoMapper | 12.0+ |
+| **Validation** | FluentValidation | 11.0+ |
+| **Background Jobs** | Hangfire / Quartz.NET | - |
+| **Real-time** | SignalR (optional) | - |
+
+---
+
+## 2. สถาปัตยกรรมระบบ (Clean Architecture + DDD)
+
+### 2.1 แผนภาพสถาปัตยกรรม (ปรับเป็น .NET)
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           PRESENTATION LAYER                               │
+│                    (ASP.NET Core Web API + Swagger)                         │
+│                   Controllers, Filters, Middleware                          │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           APPLICATION LAYER                                │
+│              (CQRS with MediatR / Use Cases / DTOs)                        │
+│         Commands, Queries, Handlers, Validators, Mappers                   │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                            DOMAIN LAYER                                    │
+│              (Entities, Value Objects, Aggregates, Interfaces)             │
+│         Domain Events, Repository Interfaces, Business Rules               │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         INFRASTRUCTURE LAYER                               │
+│    (EF Core Repositories, Unit of Work, Redis Cache, Kafka Producer/Consumer)│
+│    MQTT Client, Email Sender, File Storage, PDF Generation, Hangfire Jobs   │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      ▼
+                      ┌───────────────┼───────────────┐
+                      ▼               ▼               ▼
+               ┌───────────┐  ┌───────────┐  ┌───────────┐
+               │PostgreSQL │  │  Redis    │  │  Kafka    │
+               │(EF Core)  │  │(Cache)    │  │(Event Bus)│
+               └───────────┘  └───────────┘  └─────┬─────┘
+                                                    │
+                              ┌─────────────────────┼─────────────┐
+                              ▼                     ▼             ▼
+                       ┌───────────┐         ┌───────────┐ ┌───────────┐
+                       │Elasticsearch│         │ InfluxDB  │ │ Grafana   │
+                       │ (Logs)     │         │ (IoT)     │ │ (Metrics) │
+                       └───────────┘         └───────────┘ └───────────┘
+```
+
+### 2.2 หลักการออกแบบ (เหมือนเดิม)
+- **Separation of Concerns**
+- **Dependency Inversion**: Domain ไม่ขึ้นกับ Infrastructure
+- **CQRS + Event Sourcing** (บางส่วน)
+- **Repository + Unit of Work**
+- **Domain Events** เพื่อแยกเหตุการณ์
+
+---
+
+## 3. ตัวอย่างโครงสร้างโปรเจกต์ (Solution Structure)
+
+```
+AutoRepairShop.sln
+├── AutoRepairShop.Domain                     (Class Library)
+│   ├── Entities/
+│   │   ├── User.cs
+│   │   ├── Role.cs
+│   │   ├── Job.cs
+│   │   ├── Quotation.cs
+│   │   ├── Customer.cs
+│   │   └── ...
+│   ├── ValueObjects/
+│   │   ├── Money.cs
+│   │   ├── Address.cs
+│   │   └── ...
+│   ├── Aggregates/
+│   │   ├── JobAggregate.cs
+│   │   └── ...
+│   ├── Enums/
+│   ├── Interfaces/
+│   │   ├── IRepository.cs
+│   │   ├── IUnitOfWork.cs
+│   │   └── IEventPublisher.cs
+│   ├── Events/
+│   │   ├── JobCreatedEvent.cs
+│   │   ├── QuotationApprovedEvent.cs
+│   │   └── ...
+│   └── Exceptions/
+├── AutoRepairShop.Application               (Class Library)
+│   ├── Commands/
+│   │   ├── Jobs/
+│   │   │   ├── CreateJobCommand.cs
+│   │   │   ├── CreateJobCommandHandler.cs
+│   │   │   └── CreateJobCommandValidator.cs
+│   │   ├── Quotations/
+│   │   └── ...
+│   ├── Queries/
+│   │   ├── Jobs/
+│   │   │   ├── GetJobByIdQuery.cs
+│   │   │   ├── GetJobByIdQueryHandler.cs
+│   │   │   └── GetJobListQuery.cs
+│   │   └── ...
+│   ├── DTOs/
+│   │   ├── JobDto.cs
+│   │   ├── QuotationDto.cs
+│   │   └── ...
+│   ├── Mappings/
+│   │   └── AutoMapperProfile.cs
+│   ├── Validators/
+│   ├── Services/
+│   │   ├── IEmailService.cs
+│   │   ├── IDocumentGenerator.cs
+│   │   └── ...
+│   └── Common/
+│       ├── BaseCommand.cs
+│       ├── BaseQuery.cs
+│       └── Result.cs
+├── AutoRepairShop.Infrastructure             (Class Library)
+│   ├── Persistence/
+│   │   ├── AppDbContext.cs
+│   │   ├── Configurations/
+│   │   │   ├── JobConfiguration.cs
+│   │   │   └── ...
+│   │   ├── Repositories/
+│   │   │   ├── GenericRepository.cs
+│   │   │   ├── JobRepository.cs
+│   │   │   └── ...
+│   │   ├── UnitOfWork.cs
+│   │   └── Migrations/
+│   ├── Cache/
+│   │   ├── RedisCacheService.cs
+│   │   └── ICacheService.cs
+│   ├── Messaging/
+│   │   ├── KafkaProducer.cs
+│   │   ├── KafkaConsumer.cs
+│   │   └── EventPublisher.cs
+│   ├── IoT/
+│   │   ├── MqttClientService.cs
+│   │   └── InfluxDbService.cs
+│   ├── BackgroundJobs/
+│   │   ├── HangfireJobs.cs
+│   │   └── QuartzJobs.cs
+│   ├── DocumentGeneration/
+│   │   ├── PdfGenerator.cs (using QuestPDF)
+│   │   └── ExcelGenerator.cs (using EPPlus)
+│   ├── Email/
+│   │   └── SmtpEmailService.cs
+│   ├── Authentication/
+│   │   ├── JwtTokenService.cs
+│   │   └── CustomIdentityService.cs
+│   └── Extensions/
+│       └── ServiceCollectionExtensions.cs
+├── AutoRepairShop.Api                       (ASP.NET Core Web API)
+│   ├── Controllers/
+│   │   ├── AuthController.cs
+│   │   ├── JobsController.cs
+│   │   ├── QuotationsController.cs
+│   │   └── ...
+│   ├── Middleware/
+│   │   ├── ExceptionHandlingMiddleware.cs
+│   │   ├── RateLimitingMiddleware.cs
+│   │   └── RequestLoggingMiddleware.cs
+│   ├── Filters/
+│   │   └── ApiKeyFilter.cs
+│   ├── Program.cs
+│   ├── appsettings.json
+│   ├── appsettings.Development.json
+│   └── Properties/
+│       └── launchSettings.json
+├── AutoRepairShop.Shared                    (Class Library)
+│   ├── Constants/
+│   ├── Helpers/
+│   ├── Extensions/
+│   └── Resources/                           (สำหรับ i18n)
+│       ├── Messages.th.resx
+│       ├── Messages.en.resx
+│       └── ...
+└── AutoRepairShop.Tests                     (xUnit / NUnit)
+    ├── UnitTests/
+    ├── IntegrationTests/
+    └── Mock/
+```
