@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using ICMON.Domain.Aggregates.JobAggregate;
 using ICMON.Domain.Entities;
 using ICMON.Domain.Interfaces;
 
@@ -14,6 +15,7 @@ public class AppDbContext : DbContext, IUnitOfWork
     public DbSet<UserRole> UserRoles => Set<UserRole>();
     public DbSet<RolePermission> RolePermissions => Set<RolePermission>();
     public DbSet<UserToken> UserTokens => Set<UserToken>();
+    public DbSet<Job> Jobs => Set<Job>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

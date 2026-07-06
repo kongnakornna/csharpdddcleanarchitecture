@@ -7,6 +7,8 @@ public class Money : ValueObject
 
     public static Money Zero => new(0, "THB");
 
+    private Money() { Amount = 0; Currency = "THB"; }
+
     public Money(decimal amount, string currency = "THB")
     {
         if (amount < 0) throw new DomainException("Amount cannot be negative");
