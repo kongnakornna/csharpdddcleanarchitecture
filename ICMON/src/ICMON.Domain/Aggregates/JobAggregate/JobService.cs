@@ -7,8 +7,8 @@ public class JobService : Entity<Guid>
     public Guid JobId { get; private set; }
     public Guid ServiceId { get; private set; }
     public int Quantity { get; private set; }
-    public Money UnitPrice { get; private set; }
-    public Money TotalAmount { get; private set; }
+    public Money UnitPrice { get; private set; } = null!;
+    public Money TotalAmount { get; private set; } = null!;
     public string? Note { get; private set; }
 
     private JobService() { }
