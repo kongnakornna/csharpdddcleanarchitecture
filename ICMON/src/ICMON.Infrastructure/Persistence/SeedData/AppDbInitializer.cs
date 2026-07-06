@@ -69,16 +69,14 @@ public static class AppDbInitializer
         context.Roles.AddRange(adminRole, managerRole, userRole);
         await context.SaveChangesAsync();
 
+        var rolePermissions = new List<RolePermission>();
+
         foreach (var permission in permissions)
-        {
-            adminRole.AssignPermission(permission.Id);
-        }
+            rolePermissions.Add(RolePermission.Create(adminRole.Id, permission.Id));
 
         var managerPermissions = permissions.Where(p => p.GroupName != "Admin").ToList();
         foreach (var permission in managerPermissions)
-        {
-            managerRole.AssignPermission(permission.Id);
-        }
+            rolePermissions.Add(RolePermission.Create(managerRole.Id, permission.Id));
 
         var userPermissions = permissions.Where(p =>
             p.Code == "JOB_CREATE" || p.Code == "JOB_READ" ||
@@ -86,10 +84,9 @@ public static class AppDbInitializer
             p.Code == "INVENTORY_READ" ||
             p.Code == "DASHBOARD_VIEW").ToList();
         foreach (var permission in userPermissions)
-        {
-            userRole.AssignPermission(permission.Id);
-        }
+            rolePermissions.Add(RolePermission.Create(userRole.Id, permission.Id));
 
+        context.RolePermissions.AddRange(rolePermissions);
         await context.SaveChangesAsync();
 
         var adminUser = User.Create(

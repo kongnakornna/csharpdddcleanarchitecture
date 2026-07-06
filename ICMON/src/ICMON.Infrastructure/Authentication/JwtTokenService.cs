@@ -22,15 +22,15 @@ public class JwtTokenService : ITokenService
         _configuration = configuration;
     }
 
-    public async Task<LoginResponse> GenerateTokensAsync(Guid userId, string username, IList<string> roles, IList<string> permissions)
+    public async Task<LoginResponse> GenerateTokensAsync(User user, IList<string> roles, IList<string> permissions)
     {
         var accessTokenExpires = DateTime.UtcNow.AddMinutes(30);
         var refreshTokenExpires = DateTime.UtcNow.AddDays(7);
 
-        var accessToken = GenerateAccessToken(userId, username, roles, permissions, accessTokenExpires);
+        var accessToken = GenerateAccessToken(user.Id, user.Username, roles, permissions, accessTokenExpires);
         var refreshToken = GenerateRefreshToken();
 
-        var userToken = UserToken.Create(userId, accessToken, refreshToken, accessTokenExpires, refreshTokenExpires);
+        var userToken = UserToken.Create(user.Id, accessToken, refreshToken, accessTokenExpires, refreshTokenExpires);
         _context.UserTokens.Add(userToken);
         await _context.SaveChangesAsync();
 
@@ -41,8 +41,12 @@ public class JwtTokenService : ITokenService
             ExpiresAt = accessTokenExpires,
             User = new UserDto
             {
-                Id = userId,
-                Username = username,
+                Id = user.Id,
+                Username = user.Username,
+                Email = user.Email.Value,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Status = user.Status.ToString(),
                 Roles = roles.ToList(),
                 Permissions = permissions.ToList()
             }

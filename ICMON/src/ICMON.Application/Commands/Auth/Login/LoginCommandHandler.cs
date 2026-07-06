@@ -36,7 +36,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginRes
         var roles = user.UserRoles.Select(ur => ur.Role.Name).ToList();
         var permissionCodes = permissions.Select(p => p.Code).ToList();
 
-        var response = await _tokenService.GenerateTokensAsync(user.Id, user.Username, roles, permissionCodes);
+        var response = await _tokenService.GenerateTokensAsync(user, roles, permissionCodes);
         return Result<LoginResponse>.Success(response);
     }
 }
