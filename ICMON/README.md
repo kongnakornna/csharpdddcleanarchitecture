@@ -79,7 +79,9 @@ dotnet ef database update --project src/ICMON.Infrastructure --startup-project s
 
 # Run application
 dotnet run --project src/ICMON.Api --urls "http://localhost:1080"
-
+dotnet run --project ICMON\src\ICMON.Api
+cd ICMON
+dotnet run --project src\ICMON.Api
 # Open Swagger UI
 # http://localhost:1080/swagger
 ```
